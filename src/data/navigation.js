@@ -5,6 +5,8 @@ export const pages = [
   { id: "students", label: "STUDENT INNOVATION AND ENGAGEMENT" },
   { id: "faculty", label: "FACULTY DEVELOPMENT AND AI UPSKILLING" },
   { id: "research", label: "RESEARCH & DEVELOPMENT" },
+  { id: "ethicalai", label: "ETHICAL AI POLICY" },
+  { id: "team", label: "TEAM AI@INTEGRAL" },
 ];
 
 export const statCards = [

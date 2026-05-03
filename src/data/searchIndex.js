@@ -67,4 +67,16 @@ export const searchIndex = [
   { pageId: 'research', pageLabel: 'Research & Development', section: 'Industry Collaboration', text: 'Industry-linked research projects Consultancy solution development Joint certification programs Corporate AI training initiatives AI@Integral fosters strong partnerships' },
   { pageId: 'research', pageLabel: 'Research & Development', section: 'Research & Innovation Mandate', text: 'AI publications in indexed journals AI-based patents IP development Funded interdisciplinary projects AI for social community impact' },
   { pageId: 'research', pageLabel: 'Research & Development', section: 'Global Positioning', text: 'Global Positioning WURI Rankings 2024 World Universities Real Impact innovation-driven impact-oriented education Integral University 22nd place Generative AI Application Top 100' },
+
+  // ─── ETHICAL AI ──────────────────────────────────────────────────────────
+  { pageId: 'ethicalai', pageLabel: 'Ethical AI Policy', section: 'Overview', text: 'Ethical AI Policy Responsible Innovation responsible development deployment Artificial Intelligence fairness transparency accountability privacy human well-being' },
+  { pageId: 'ethicalai', pageLabel: 'Ethical AI Policy', section: 'Core Principles', text: 'Fairness Non-Discrimination Transparency Explainability Accountability Responsibility Privacy Data Protection Human Oversight Control Inclusivity Accessibility Sustainability Social Good' },
+  { pageId: 'ethicalai', pageLabel: 'Ethical AI Policy', section: 'Policy Scope', text: 'AI use academic programs curricula AI-powered research data analysis AI tools students faculty administrative AI systems automation AI-generated content intellectual property third-party AI platforms' },
+  { pageId: 'ethicalai', pageLabel: 'Ethical AI Policy', section: 'Commitments', text: 'ethical AI practice reviewing AI systems bias unintended harm informed consent data collection human decision-making academic integrity institutional equity student privacy responsible AI' },
+  { pageId: 'ethicalai', pageLabel: 'Ethical AI Policy', section: 'Guidelines', text: 'disclose AI-assisted work academic submissions misleading harmful content protect personal data biased erroneous AI outputs intellectual property AI-generated content responsible use guidelines' },
+
+  // ─── TEAM ────────────────────────────────────────────────────────────────
+  { pageId: 'team', pageLabel: 'Team AI@Integral', section: 'Leadership', text: 'Dr. Syed Nadeem Akhtar Chairperson Pro-Chancellor Prof. Furqan Qamar Co-Chairperson Vice Chancellor Officiating' },
+  { pageId: 'team', pageLabel: 'Team AI@Integral', section: 'Coordinators', text: 'Prof. Mohammad Faisal Coordinator Head Department of Computer Application Prof. Shish Ahmad Joint Coordinator Head Department of Computer Science Engineering' },
+  { pageId: 'team', pageLabel: 'Team AI@Integral', section: 'Members', text: 'Prof. Syed Misbahul Hasan Member Director IQAC Prof. Mohammed Haris Siddiqui Member Director Directorate of Admissions Academics Dr. Mirza Ghazanfar Beg Member Assistant Professor Computer Application IUCAT Mr. Syed Gulam Mohamood Member Manager IT Services Mr. Mashuood Ali Member Coordinator DOSA' },
 ];
