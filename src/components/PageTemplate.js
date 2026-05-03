@@ -117,7 +117,7 @@ function RoboticsCarousel({ images, title }) {
   );
 }
 
-export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate }) {
+export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, children }) {
   const nextPage = pages[(pages.findIndex((page) => page.id === activePage) + 1) % pages.length].id;
   const featureItems =
     content.highlights ||
@@ -1111,6 +1111,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate }
         )}
 
       </div>
+      {children}
       <Footer />
     </main>
   );

@@ -53,9 +53,8 @@ const content = {
 
 export function TeamPage(props) {
   return (
-    <>
-      <PageTemplate {...props} content={content} icon={Users2} />
-      {/* Custom team grid rendered outside the template to keep template clean */}
+    <PageTemplate {...props} content={content} icon={Users2}>
+      {/* Team grid rendered as children — before the footer */}
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem 4rem' }}>
         <motion.div
           variants={staggerContainer}
@@ -87,7 +86,6 @@ export function TeamPage(props) {
                     whileHover={{ y: -4, transition: { type: 'spring', stiffness: 300, damping: 20 } }}
                     style={{ flex: '1 1 260px', maxWidth: '360px', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}
                   >
-                    {/* Colour accent dot */}
                     <span style={{ display: 'inline-block', width: '10px', height: '10px', borderRadius: '50%', background: group.color, marginBottom: '0.25rem' }} />
                     <h4 style={{ fontSize: '1.05rem', color: 'var(--text-main)', margin: 0, lineHeight: 1.3 }}>
                       {member.name}
@@ -105,6 +103,7 @@ export function TeamPage(props) {
           ))}
         </motion.div>
       </div>
-    </>
+    </PageTemplate>
   );
 }
+

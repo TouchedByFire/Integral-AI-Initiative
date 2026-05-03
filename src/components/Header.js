@@ -148,150 +148,150 @@ export function Header({ activePage, menuOpen, onMenuToggle, onNavigate }) {
               {page.label}
             </button>
           ))}
-
-          {/* Search widget */}
-          <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
-            <AnimatePresence>
-              {searchOpen && (
-                <motion.input
-                  ref={inputRef}
-                  initial={{ width: 0, opacity: 0, paddingLeft: 0, paddingRight: 0 }}
-                  animate={{ width: 220, opacity: 1, paddingLeft: '1rem', paddingRight: '1rem' }}
-                  exit={{ width: 0, opacity: 0, paddingLeft: 0, paddingRight: 0 }}
-                  transition={{ duration: 0.2 }}
-                  type="text"
-                  placeholder="What are you looking for?"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  style={{
-                    borderRadius: '20px',
-                    border: '1px solid var(--border-highlight)',
-                    outline: 'none',
-                    background: 'var(--bg-surface-light)',
-                    color: 'var(--text-main)',
-                    marginRight: '0.5rem',
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: '0.9rem',
-                    height: '36px',
-                    boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)',
-                  }}
-                  autoFocus
-                />
-              )}
-            </AnimatePresence>
-
-            <button
-              aria-label={searchOpen ? "Close search" : "Search site"}
-              title={searchOpen ? "Close" : "Search"}
-              onClick={() => {
-                if (searchOpen) { closeSearch(); } else { setSearchOpen(true); }
-              }}
-              style={{ padding: '0.4rem', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: '40px' }}
-            >
-              {searchOpen ? <X size={20} /> : <Search size={20} />}
-            </button>
-
-            {/* Results dropdown */}
-            <AnimatePresence>
-              {searchOpen && results.length > 0 && (
-                <motion.div
-                  ref={dropdownRef}
-                  initial={{ opacity: 0, y: -8, scale: 0.97 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -8, scale: 0.97 }}
-                  transition={{ duration: 0.18 }}
-                  style={{
-                    position: 'absolute',
-                    top: 'calc(100% + 10px)',
-                    right: 0,
-                    width: '360px',
-                    background: 'var(--bg-surface)',
-                    border: '1px solid var(--border)',
-                    borderRadius: 'var(--radius)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
-                    zIndex: 9999,
-                    overflow: 'hidden',
-                  }}
-                >
-                  {/* Header bar */}
-                  <div style={{ padding: '0.6rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    {results.length} result{results.length !== 1 ? 's' : ''} for "{query}"
-                  </div>
-
-                  {/* Result rows */}
-                  <ul style={{ listStyle: 'none', margin: 0, padding: '0.5rem 0', maxHeight: '420px', overflowY: 'auto' }}>
-                    {results.map((r, i) => (
-                      <li key={`${r.pageId}-${r.section}-${i}`}>
-                        <button
-                          onClick={() => handleSelect(r.pageId)}
-                          onMouseEnter={() => setActiveIdx(i)}
-                          style={{
-                            width: '100%',
-                            textAlign: 'left',
-                            padding: '0.75rem 1rem',
-                            background: activeIdx === i ? 'var(--bg-surface-light)' : 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '0.25rem',
-                            borderLeft: activeIdx === i ? '3px solid var(--primary)' : '3px solid transparent',
-                            transition: 'background 0.15s, border-color 0.15s',
-                          }}
-                        >
-                          {/* Page + section label */}
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                            <span style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--primary)', background: 'var(--primary-glow)', borderRadius: '4px', padding: '0.1rem 0.4rem' }}>
-                              {r.pageLabel}
-                            </span>
-                            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>
-                              {r.section}
-                            </span>
-                          </div>
-                          {/* Matched text snippet */}
-                          <div style={{ fontSize: '0.85rem', color: 'var(--text-main)', lineHeight: 1.4, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
-                            <Highlight text={r.text.slice(0, 120)} query={query} />
-                          </div>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* No results state */}
-            <AnimatePresence>
-              {searchOpen && query.trim().length >= 2 && results.length === 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.18 }}
-                  style={{
-                    position: 'absolute',
-                    top: 'calc(100% + 10px)',
-                    right: 0,
-                    width: '280px',
-                    background: 'var(--bg-surface)',
-                    border: '1px solid var(--border)',
-                    borderRadius: 'var(--radius)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
-                    padding: '1.25rem 1rem',
-                    zIndex: 9999,
-                    textAlign: 'center',
-                    color: 'var(--text-muted)',
-                    fontSize: '0.9rem',
-                  }}
-                >
-                  No results for <strong style={{ color: 'var(--text-main)' }}>"{query}"</strong>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
         </nav>
+
+        {/* Search widget — outside <nav> so overflow-x:auto doesn't clip the dropdown */}
+        <div style={{ display: 'flex', alignItems: 'center', position: 'relative', flexShrink: 0 }}>
+          <AnimatePresence>
+            {searchOpen && (
+              <motion.input
+                ref={inputRef}
+                initial={{ width: 0, opacity: 0, paddingLeft: 0, paddingRight: 0 }}
+                animate={{ width: 220, opacity: 1, paddingLeft: '1rem', paddingRight: '1rem' }}
+                exit={{ width: 0, opacity: 0, paddingLeft: 0, paddingRight: 0 }}
+                transition={{ duration: 0.2 }}
+                type="text"
+                placeholder="What are you looking for?"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+                style={{
+                  borderRadius: '20px',
+                  border: '1px solid var(--border-highlight)',
+                  outline: 'none',
+                  background: 'var(--bg-surface-light)',
+                  color: 'var(--text-main)',
+                  marginRight: '0.5rem',
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '0.9rem',
+                  height: '36px',
+                  boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)',
+                }}
+                autoFocus
+              />
+            )}
+          </AnimatePresence>
+
+          <button
+            aria-label={searchOpen ? "Close search" : "Search site"}
+            title={searchOpen ? "Close" : "Search"}
+            onClick={() => {
+              if (searchOpen) { closeSearch(); } else { setSearchOpen(true); }
+            }}
+            style={{ padding: '0.4rem', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: '40px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
+          >
+            {searchOpen ? <X size={20} /> : <Search size={20} />}
+          </button>
+
+          {/* Results dropdown */}
+          <AnimatePresence>
+            {searchOpen && results.length > 0 && (
+              <motion.div
+                ref={dropdownRef}
+                initial={{ opacity: 0, y: -8, scale: 0.97 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.97 }}
+                transition={{ duration: 0.18 }}
+                style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 10px)',
+                  right: 0,
+                  width: '360px',
+                  background: 'var(--bg-surface)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
+                  zIndex: 9999,
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Header bar */}
+                <div style={{ padding: '0.6rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  {results.length} result{results.length !== 1 ? 's' : ''} for "{query}"
+                </div>
+
+                {/* Result rows */}
+                <ul style={{ listStyle: 'none', margin: 0, padding: '0.5rem 0', maxHeight: '420px', overflowY: 'auto' }}>
+                  {results.map((r, i) => (
+                    <li key={`${r.pageId}-${r.section}-${i}`}>
+                      <button
+                        onClick={() => handleSelect(r.pageId)}
+                        onMouseEnter={() => setActiveIdx(i)}
+                        style={{
+                          width: '100%',
+                          textAlign: 'left',
+                          padding: '0.75rem 1rem',
+                          background: activeIdx === i ? 'var(--bg-surface-light)' : 'transparent',
+                          border: 'none',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '0.25rem',
+                          borderLeft: activeIdx === i ? '3px solid var(--primary)' : '3px solid transparent',
+                          transition: 'background 0.15s, border-color 0.15s',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <span style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--primary)', background: 'var(--primary-glow)', borderRadius: '4px', padding: '0.1rem 0.4rem' }}>
+                            {r.pageLabel}
+                          </span>
+                          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+                            {r.section}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: '0.85rem', color: 'var(--text-main)', lineHeight: 1.4, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                          <Highlight text={r.text.slice(0, 120)} query={query} />
+                        </div>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* No results state */}
+          <AnimatePresence>
+            {searchOpen && query.trim().length >= 2 && results.length === 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.18 }}
+                style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 10px)',
+                  right: 0,
+                  width: '280px',
+                  background: 'var(--bg-surface)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
+                  padding: '1.25rem 1rem',
+                  zIndex: 9999,
+                  textAlign: 'center',
+                  color: 'var(--text-muted)',
+                  fontSize: '0.9rem',
+                }}
+              >
+                No results for <strong style={{ color: 'var(--text-main)' }}>"{query}"</strong>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
       </div>
     </motion.header>
   );
 }
+
