@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Users2 } from "lucide-react";
 import { PageTemplate } from "../components/PageTemplate";
+import { asset } from "../utils/assets";
 
 const staggerContainer = {
   hidden: {},
@@ -41,11 +42,11 @@ const teamGroups = [
   },
 ];
 
-
 const content = {
   title: "Team AI@Integral",
   eyebrow: "The People Behind the Initiative",
   subtitle: "Faculty, researchers, and student leaders driving AI transformation at Integral University",
+  image: asset("TEAM/hero_banner.png"),
   heroMaxWidth: "900px",
   intro:
     "The AI@Integral Initiative is driven by a dedicated team of academic leaders, faculty coordinators, technical experts, and student representatives. Together, they work across departments to embed Artificial Intelligence into every facet of the university — from curricula and research to labs and student engagement.",
