@@ -33,6 +33,7 @@ export function App() {
 
   return (
     <div className="app">
+      <div className="cyber-bg" />
       <Header
         activePage={activePage}
         menuOpen={menuOpen}

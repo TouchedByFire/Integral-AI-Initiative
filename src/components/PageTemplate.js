@@ -136,6 +136,25 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
             src={content.image}
             alt="Hero Background"
           />
+          {/* Decorative Particles */}
+          {[...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              className="floating-data"
+              style={{
+                position: 'absolute',
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                width: '4px',
+                height: '4px',
+                background: 'var(--secondary)',
+                boxShadow: '0 0 10px var(--secondary)',
+                borderRadius: '50%',
+                animation: `float-particle ${5 + Math.random() * 5}s linear infinite`,
+                animationDelay: `${Math.random() * 5}s`
+              }}
+            />
+          ))}
         </div>
 
         <motion.div
@@ -146,7 +165,9 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
           style={content.heroMaxWidth ? { maxWidth: content.heroMaxWidth } : undefined}
         >
           <motion.div variants={fadeInUp} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--primary)', marginBottom: '1rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
-            <PageIcon size={20} />
+            <div className="pulse-icon" style={{ display: 'flex', padding: '8px', background: 'var(--primary-glow)' }}>
+              <PageIcon size={20} />
+            </div>
             <span>{content.eyebrow}</span>
           </motion.div>
           <motion.h2 variants={fadeInUp} className="gradient-text">
@@ -207,15 +228,15 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
           </div>
 
           <div className="overview-layout">
-            <motion.article variants={scaleUp} className="glass-panel overview-panel">
+            <motion.article variants={scaleUp} className="glass-panel glass-panel--primary overview-panel">
               <p style={{ fontSize: '1.2rem', color: 'var(--text-main)', marginBottom: '1.5rem', lineHeight: 1.8 }}>{content.intro}</p>
               {content.body && <p style={{ color: 'var(--text-muted)', lineHeight: 1.7 }}>{content.body}</p>}
             </motion.article>
 
             {featureItems.length > 0 && (
               <motion.div variants={staggerContainer} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                {featureItems.map(({ icon: FeatureIcon = BookOpenCheck, title, text }) => (
-                  <motion.article variants={fadeInUp} key={title} className="glass-panel" style={{ padding: '2rem', display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
+                {featureItems.map(({ icon: FeatureIcon = BookOpenCheck, title, text }, idx) => (
+                  <motion.article variants={fadeInUp} key={title} className={`glass-panel ${idx % 2 === 0 ? 'glass-panel--secondary' : 'glass-panel--teal'}`} style={{ padding: '2rem', display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
                     <div style={{ background: 'var(--bg-surface-light)', padding: '1rem', borderRadius: '12px', color: 'var(--secondary)' }}>
                       <FeatureIcon size={24} />
                     </div>
@@ -240,7 +261,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
           >
-            <motion.div variants={scaleUp} className="glass-panel" style={{ position: 'relative', overflow: 'hidden', padding: '3rem' }}>
+            <motion.div variants={scaleUp} className="glass-panel glass-panel--gold" style={{ position: 'relative', overflow: 'hidden', padding: '3rem' }}>
               {/* Celebratory Icon Background */}
               <div style={{ position: 'absolute', top: '-40px', left: '-40px', opacity: 0.05, color: '#fbbf24', transform: 'rotate(-15deg)' }}>
                 <PartyPopper size={300} />
@@ -296,11 +317,11 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
             viewport={{ once: true, margin: "-100px" }}
           >
             <div className="vm-grid">
-              <motion.article variants={fadeInUp} className="vm-card glass-panel">
+              <motion.article variants={fadeInUp} className="vm-card glass-panel glass-panel--secondary">
                 <h3>Vision</h3>
                 <p>{content.visionMission.vision}</p>
               </motion.article>
-              <motion.article variants={fadeInUp} className="vm-card glass-panel" style={{ borderTop: '4px solid var(--secondary)' }}>
+              <motion.article variants={fadeInUp} className="vm-card glass-panel glass-panel--accent">
                 <h3>Mission</h3>
                 <ul>
                   {content.visionMission.mission.map((item, index) => (
@@ -386,10 +407,10 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
               <motion.h2 variants={fadeInUp}>Program Details</motion.h2>
             </div>
             <div className="bento-grid details-grid">
-              {content.sections.map((section) => (
+              {content.sections.map((section, idx) => (
                 <motion.article
                   variants={scaleUp}
-                  className={`glass-panel ${section.fullWidth ? 'mission-card' : ''} ${(activePage === "home" && section.title === "Mission") || (activePage === "iucare" && section.title === "Core Laboratory Ecosystem") ? "mission-card" : ""}`}
+                  className={`glass-panel ${section.fullWidth ? 'mission-card' : ''} ${(activePage === "home" && section.title === "Mission") || (activePage === "iucare" && section.title === "Core Laboratory Ecosystem") ? "mission-card" : ""} ${idx % 2 === 0 ? 'glass-panel--violet' : 'glass-panel--teal'}`}
                   style={{ padding: '2rem' }}
                   key={section.title}
                 >
@@ -422,7 +443,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
           >
             <motion.div
               variants={fadeInUp}
-              className="glass-panel"
+              className="glass-panel glass-panel--primary"
               style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', alignItems: 'center', padding: '2.5rem' }}
             >
               {/* Text side */}
@@ -466,7 +487,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
           >
             <motion.article
               variants={scaleUp}
-              className="glass-panel mission-card"
+              className="glass-panel glass-panel--violet mission-card"
               style={{ padding: '2rem' }}
             >
               <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--text-main)' }}>{content.mandate.title}</h3>
@@ -493,7 +514,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
           >
             <motion.div
               variants={fadeInUp}
-              className="glass-panel"
+              className="glass-panel glass-panel--primary"
               style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', alignItems: 'center', padding: '2.5rem' }}
             >
               {/* Text side */}
@@ -563,7 +584,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
                     </div>
 
                     {/* Text Panel */}
-                    <div className="glass-panel" style={{ flex: '1 1 360px', padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <div className={`glass-panel ${index % 2 === 0 ? 'glass-panel--secondary' : 'glass-panel--violet'}`} style={{ flex: '1 1 360px', padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                       <div>
                         <span style={{ display: 'inline-block', background: 'var(--primary-glow)', color: 'var(--primary)', borderRadius: '6px', padding: '0.25rem 0.75rem', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.75rem' }}>
                           {content.hackathons.eventLabel || 'Hackathon'} {String(index + 1).padStart(2, '0')}
@@ -616,7 +637,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
                 <motion.div
                   key={cat.label}
                   variants={fadeInUp}
-                  className="glass-panel"
+                  className="glass-panel glass-panel--teal"
                   style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem', flex: '1 1 280px', maxWidth: '380px' }}
                 >
                   {/* Category Header */}
@@ -668,7 +689,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
                 <motion.div
                   key={pillar.title}
                   variants={fadeInUp}
-                  className="glass-panel"
+                  className="glass-panel glass-panel--teal"
                   style={{ flex: '1 1 200px', maxWidth: '260px', padding: '1.75rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', textAlign: 'center' }}
                 >
                   {/* Title */}
@@ -724,7 +745,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
               style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', justifyContent: 'center' }}
             >
               {content.programSections.map((sec, idx) => (
-                <motion.div key={sec.title} variants={fadeInUp} className="glass-panel" style={{ padding: '2rem', flex: '1 1 380px', maxWidth: 'calc(50% - 0.75rem)' }}>
+                <motion.div key={sec.title} variants={fadeInUp} className="glass-panel glass-panel--violet" style={{ padding: '2rem', flex: '1 1 380px', maxWidth: 'calc(50% - 0.75rem)' }}>
                   {/* Left-aligned numbered heading */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
                     <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '0.8rem', color: 'var(--primary)', background: 'var(--primary-glow)', borderRadius: '6px', padding: '0.2rem 0.55rem', letterSpacing: '1px' }}>
@@ -763,7 +784,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
               <motion.h2 variants={fadeInUp}>{content.infrastructure.title}</motion.h2>
             </div>
 
-            <motion.div variants={scaleUp} className="glass-panel" style={{ padding: '2.5rem 3rem' }}>
+            <motion.div variants={scaleUp} className="glass-panel glass-panel--primary" style={{ padding: '2.5rem 3rem' }}>
               <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginBottom: '1.75rem', lineHeight: 1.8 }}>
                 {content.infrastructure.intro}
               </p>
@@ -809,7 +830,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
                     style={{ display: 'flex', flexWrap: 'wrap', gap: '2.5rem', alignItems: 'stretch', flexDirection: isEven ? 'row-reverse' : 'row' }}
                   >
                     {/* Text Panel */}
-                    <div className="lab-text glass-panel" style={{ flex: '1 1 360px', padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div className="lab-text glass-panel glass-panel--secondary" style={{ flex: '1 1 360px', padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                       <div>
                         <span style={{ display: 'inline-block', background: 'var(--primary-glow)', color: 'var(--primary)', borderRadius: '6px', padding: '0.25rem 0.75rem', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.75rem' }}>
                           Lab {String(index + 1).padStart(2, '0')}
@@ -873,7 +894,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
               <motion.h2 variants={fadeInUp}>{content.robotics.title}</motion.h2>
             </div>
 
-            <motion.div variants={fadeInUp} className="glass-panel" style={{ padding: '2.5rem 3rem', marginBottom: '2.5rem' }}>
+            <motion.div variants={fadeInUp} className="glass-panel glass-panel--primary" style={{ padding: '2.5rem 3rem', marginBottom: '2.5rem' }}>
               <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', lineHeight: 1.9 }}>
                 {content.robotics.description}
               </p>
@@ -930,7 +951,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
                 return isLinked ? (
                   <motion.article
                     variants={scaleUp}
-                    className="bento-item glass-panel pillar-link"
+                    className={`bento-item glass-panel pillar-link ${index % 2 === 0 ? 'glass-panel--violet' : 'glass-panel--teal'}`}
                     key={title}
                     style={isIcon ? { justifyContent: 'flex-start', paddingTop: '3rem', textAlign: 'center', cursor: 'pointer' } : { cursor: 'pointer' }}
                     onClick={() => onNavigate(linkTo)}
@@ -946,7 +967,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
                 ) : (
                   <motion.article
                     variants={scaleUp}
-                    className="bento-item glass-panel"
+                    className={`bento-item glass-panel ${index % 2 === 0 ? 'glass-panel--violet' : 'glass-panel--teal'}`}
                     key={title}
                     style={isIcon ? { justifyContent: 'flex-start', paddingTop: '3rem', textAlign: 'center' } : {}}
                   >
@@ -972,7 +993,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
             </div>
             <ul className="focus-list">
               {content.focusAreas.items.map((item, index) => (
-                <motion.li variants={fadeInUp} key={index} className="focus-item glass-panel">
+                <motion.li variants={fadeInUp} key={index} className="focus-item glass-panel glass-panel--primary">
                   <ArrowRight size={20} className="icon" />
                   {item}
                 </motion.li>
@@ -1003,7 +1024,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
                   style={{ display: 'flex', flexWrap: 'wrap', gap: '2.5rem', alignItems: 'stretch' }}
                 >
                   {/* Text panel */}
-                  <div className="glass-panel" style={{ flex: '1 1 360px', padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                  <div className="glass-panel glass-panel--violet" style={{ flex: '1 1 360px', padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                     <h3 style={{ fontSize: '1.5rem', marginBottom: '0.25rem', color: 'var(--text-main)' }}>{section.title}</h3>
                     {section.text && <p style={{ color: 'var(--text-muted)', lineHeight: 1.75 }}>{section.text}</p>}
                     {section.items && (
@@ -1035,7 +1056,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
                   <motion.article
                     key={section.title}
                     variants={scaleUp}
-                    className="glass-panel"
+                    className="glass-panel glass-panel--violet"
                     style={{ padding: '2rem' }}
                   >
                     <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--text-main)' }}>{section.title}</h3>
