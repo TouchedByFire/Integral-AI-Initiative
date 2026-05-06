@@ -137,24 +137,47 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
             alt="Hero Background"
           />
           {/* Decorative Particles */}
-          {[...Array(6)].map((_, i) => (
+          {[...Array(8)].map((_, i) => (
             <div
               key={i}
               className="floating-data"
               style={{
                 position: 'absolute',
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                width: '4px',
-                height: '4px',
-                background: 'var(--secondary)',
-                boxShadow: '0 0 10px var(--secondary)',
+                top: `${10 + Math.random() * 80}%`,
+                left: `${5 + Math.random() * 90}%`,
+                width: `${3 + Math.random() * 5}px`,
+                height: `${3 + Math.random() * 5}px`,
+                background: i % 2 === 0 ? 'var(--secondary)' : 'var(--primary)',
+                boxShadow: `0 0 ${8 + Math.random() * 12}px ${i % 2 === 0 ? 'var(--secondary)' : 'var(--primary)'}`,
                 borderRadius: '50%',
-                animation: `float-particle ${5 + Math.random() * 5}s linear infinite`,
-                animationDelay: `${Math.random() * 5}s`
+                animation: `float-particle ${4 + Math.random() * 6}s linear infinite`,
+                animationDelay: `${Math.random() * 4}s`
               }}
             />
           ))}
+
+          {/* Decorative rings */}
+          <div style={{
+            position: 'absolute',
+            top: '15%',
+            right: '10%',
+            width: '120px',
+            height: '120px',
+            border: '2px solid rgba(17, 103, 216, 0.15)',
+            borderRadius: '50%',
+            animation: 'float 6s ease-in-out infinite'
+          }} />
+          <div style={{
+            position: 'absolute',
+            bottom: '20%',
+            left: '8%',
+            width: '80px',
+            height: '80px',
+            border: '2px solid rgba(24, 165, 201, 0.15)',
+            borderRadius: '50%',
+            animation: 'float 8s ease-in-out infinite',
+            animationDelay: '2s'
+          }} />
         </div>
 
         <motion.div
@@ -193,8 +216,19 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '3rem', padding: '3rem 2rem', background: 'var(--bg-surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', backdropFilter: 'blur(12px)' }}
+        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '3rem', padding: '3.5rem 2rem', background: 'var(--bg-surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', backdropFilter: 'blur(12px)', position: 'relative', overflow: 'hidden' }}
       >
+        {/* Decorative gradient stripe */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '3px',
+          background: 'var(--gradient-primary)',
+          backgroundSize: '200% 100%',
+          animation: 'shimmer 3s linear infinite'
+        }} />
         {statCards.map(([value, label], index) => (
           <motion.div
             key={label}

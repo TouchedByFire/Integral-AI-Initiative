@@ -61,6 +61,7 @@ export function Header({ activePage, menuOpen, onMenuToggle, onNavigate }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [activeIdx, setActiveIdx] = useState(-1);
+  const [scrolled, setScrolled] = useState(false);
   const inputRef = useRef(null);
   const dropdownRef = useRef(null);
 
@@ -69,6 +70,15 @@ export function Header({ activePage, menuOpen, onMenuToggle, onNavigate }) {
     setResults(runSearch(query));
     setActiveIdx(-1);
   }, [query]);
+
+  // Detect scroll for header shadow effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -113,7 +123,7 @@ export function Header({ activePage, menuOpen, onMenuToggle, onNavigate }) {
 
   return (
     <motion.header
-      className="main-header"
+      className={`main-header ${scrolled ? 'scrolled' : ''}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
