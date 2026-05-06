@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useInView, animate } from "framer-motion";
 import { ArrowRight, BookOpenCheck, Trophy, CheckCircle2, PartyPopper, ChevronLeft, ChevronRight } from "lucide-react";
 import { Footer } from "./Footer";
 import { pages, statCards } from "../data/navigation";
@@ -20,8 +20,54 @@ const fadeInUp = {
 
 const scaleUp = {
   hidden: { opacity: 0, scale: 0.95 },
-  show: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 50 } }
+  show: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 40, damping: 12 } }
 };
+
+function StatCounter({ value }) {
+  const nodeRef = useRef(null);
+  const isInView = useInView(nodeRef, { once: true, margin: "-100px 0px -100px 0px" });
+
+  useEffect(() => {
+    let timeout;
+    let controls;
+
+    const numericPart = value.match(/\d+/);
+    if (!numericPart) {
+      if (nodeRef.current) nodeRef.current.textContent = value;
+      return;
+    }
+    
+    const target = parseInt(numericPart[0]);
+    const suffix = value.replace(/\d+/, '');
+    const prefix = value.split(numericPart[0])[0];
+
+    const runAnimation = () => {
+      controls = animate(0, target, {
+        duration: 2.5,
+        ease: "easeOut",
+        onUpdate: (latest) => {
+          if (nodeRef.current) {
+            nodeRef.current.textContent = prefix + Math.floor(latest) + suffix;
+          }
+        },
+        onComplete: () => {
+          timeout = setTimeout(runAnimation, 7000);
+        }
+      });
+    };
+
+    if (isInView && nodeRef.current) {
+      runAnimation();
+    }
+
+    return () => {
+      if (controls) controls.stop();
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [isInView, value]);
+
+  return <span ref={nodeRef}>{value.match(/\d+/) ? '0' : value}</span>;
+}
 
 function RoboticsCarousel({ images, title }) {
   const [current, setCurrent] = useState(0);
@@ -123,6 +169,37 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
     content.highlights ||
     content.cards?.slice(0, 3).map(([title, text]) => ({ title, text, icon: BookOpenCheck })) ||
     [];
+  
+  const displayStatCards = [...statCards];
+  if (activePage === "students" || activePage === "faculty") {
+    // 1. Remove AI Culture
+    const aiCultureIdx = displayStatCards.findIndex(s => s[1].includes("Culture"));
+    if (aiCultureIdx > -1) displayStatCards.splice(aiCultureIdx, 1);
+    
+    // 2. Calculate dynamic count
+    let totalCount = 0;
+    if (content.engagement?.categories) {
+      content.engagement.categories.forEach(cat => {
+        totalCount += (cat.items?.length || 0);
+      });
+    }
+    if (content.hackathons?.events) {
+      totalCount += content.hackathons.events.length;
+    }
+
+    // 3. Add dynamic card based on page
+    if (activePage === "students") {
+      displayStatCards.push([totalCount.toString(), "Activities", "students", "activities"]);
+    } else {
+      displayStatCards.push([totalCount.toString(), "FDP", "faculty", "activities"]);
+    }
+  }
+
+  if (activePage === "research") {
+    const aiCultureIdx = displayStatCards.findIndex(s => s[1].includes("Culture"));
+    if (aiCultureIdx > -1) displayStatCards.splice(aiCultureIdx, 1);
+    displayStatCards.push(["50+", "Research Papers", "research", "research-activities"]);
+  }
 
   return (
     <main className="app-container">
@@ -199,14 +276,6 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
           <motion.p variants={fadeInUp}>
             {content.subtitle}
           </motion.p>
-          <motion.div variants={fadeInUp}>
-            <button
-              className="btn btn-primary"
-              onClick={() => document.getElementById("overview")?.scrollIntoView({ behavior: "smooth" })}
-            >
-              Explore Initiative <ArrowRight size={18} />
-            </button>
-          </motion.div>
         </motion.div>
       </section>
 
@@ -216,7 +285,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '3rem', padding: '3.5rem 2rem', background: 'var(--bg-surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', backdropFilter: 'blur(12px)', position: 'relative', overflow: 'hidden' }}
+        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '3rem', padding: '2rem 2rem', background: 'var(--bg-surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', backdropFilter: 'blur(12px)', position: 'relative', overflow: 'hidden' }}
       >
         {/* Decorative gradient stripe */}
         <div style={{
@@ -229,18 +298,30 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
           backgroundSize: '200% 100%',
           animation: 'shimmer 3s linear infinite'
         }} />
-        {statCards.map(([value, label], index) => (
-          <motion.div
+        {displayStatCards.map(([value, label, target, sectionId], index) => (
+          <motion.button
             key={label}
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.1 }}
             viewport={{ once: true }}
-            style={{ textAlign: 'center' }}
+            onClick={() => onNavigate(target, sectionId)}
+            style={{ 
+              background: 'none', 
+              border: 'none', 
+              textAlign: 'center', 
+              cursor: 'pointer',
+              padding: '1rem',
+              borderRadius: 'var(--radius)',
+              transition: 'var(--transition-smooth)'
+            }}
+            whileHover={{ scale: 1.05, background: 'rgba(17, 103, 216, 0.05)' }}
           >
-            <strong className="gradient-text" style={{ fontSize: '3rem', display: 'block', lineHeight: 1 }}>{value}</strong>
+            <strong className="gradient-text" style={{ fontSize: value.length > 8 ? '1.8rem' : '3rem', display: 'block', lineHeight: 1.2, marginBottom: '0.5rem' }}>
+              <StatCounter value={value} />
+            </strong>
             <span style={{ color: 'var(--text-muted)', fontWeight: 500, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>{label}</span>
-          </motion.div>
+          </motion.button>
         ))}
       </motion.section>
 
@@ -270,7 +351,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
             {featureItems.length > 0 && (
               <motion.div variants={staggerContainer} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 {featureItems.map(({ icon: FeatureIcon = BookOpenCheck, title, text }, idx) => (
-                  <motion.article variants={fadeInUp} key={title} className={`glass-panel ${idx % 2 === 0 ? 'glass-panel--secondary' : 'glass-panel--teal'}`} style={{ padding: '2rem', display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
+                  <motion.article variants={fadeInUp} key={title} className={`glass-panel ${idx % 2 === 0 ? 'glass-panel--secondary' : 'glass-panel--teal'}`} style={{ padding: '2rem', display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                     <div style={{ background: 'var(--bg-surface-light)', padding: '1rem', borderRadius: '12px', color: 'var(--secondary)' }}>
                       <FeatureIcon size={24} />
                     </div>
@@ -373,6 +454,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
         {/* X + AI Disciplines Section */}
         {content.disciplines && (
           <motion.section
+            id="disciplines"
             className="bento-section"
             variants={staggerContainer}
             initial="hidden"
@@ -443,10 +525,11 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
             <div className="bento-grid details-grid">
               {content.sections.map((section, idx) => (
                 <motion.article
-                  variants={scaleUp}
-                  className={`glass-panel ${section.fullWidth ? 'mission-card' : ''} ${(activePage === "home" && section.title === "Mission") || (activePage === "iucare" && section.title === "Core Laboratory Ecosystem") ? "mission-card" : ""} ${idx % 2 === 0 ? 'glass-panel--violet' : 'glass-panel--teal'}`}
-                  style={{ padding: '2rem' }}
                   key={section.title}
+                  id={section.title.toLowerCase().replace(/\s+/g, '-')}
+                  variants={fadeInUp}
+                  className={`glass-panel ${section.fullWidth ? 'mission-card' : ''} ${(activePage === "home" && section.title === "Core Components") || (activePage === "iucare" && section.title === "Core Laboratory Ecosystem") ? "mission-card" : ""} ${idx % 2 === 0 ? 'glass-panel--violet' : 'glass-panel--teal'}`}
+                  style={{ padding: '2rem' }}
                 >
                   <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--text-main)' }}>{section.title}</h3>
                   {section.text && <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>{section.text}</p>}
@@ -478,7 +561,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
             <motion.div
               variants={fadeInUp}
               className="glass-panel glass-panel--primary"
-              style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', alignItems: 'center', padding: '2.5rem' }}
+              style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'center', padding: '2.5rem' }}
             >
               {/* Text side */}
               <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -549,7 +632,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
             <motion.div
               variants={fadeInUp}
               className="glass-panel glass-panel--primary"
-              style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', alignItems: 'center', padding: '2.5rem' }}
+              style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'center', padding: '2.5rem' }}
             >
               {/* Text side */}
               <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -594,7 +677,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
               <motion.h2 variants={fadeInUp}>{content.hackathons.sectionTitle}</motion.h2>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
               {content.hackathons.events.map((event, index) => {
                 const isEven = index % 2 === 1;
                 return (
@@ -635,11 +718,11 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
                         </div>
                       </div>
 
-                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.8 }}>{event.description}</p>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.8, textAlign: 'justify' }}>{event.description}</p>
 
                       <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
                         <h4 style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--accent)', marginBottom: '0.6rem' }}>Impact</h4>
-                        <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', lineHeight: 1.75, fontStyle: 'italic' }}>{event.impact}</p>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', lineHeight: 1.75, fontStyle: 'italic', textAlign: 'justify' }}>{event.impact}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -652,6 +735,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
         {/* Student Engagement / Faculty Development in AI — mid-page */}
         {content.engagement && !content.engagementAtBottom && (
           <motion.section
+            id="activities"
             className="bento-section"
             variants={staggerContainer}
             initial="hidden"
@@ -709,6 +793,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
         {/* Student Pillars — icon cards */}
         {content.pillars && (
           <motion.section
+            id="pillars"
             className="bento-section"
             variants={staggerContainer}
             initial="hidden"
@@ -804,7 +889,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
           </motion.section>
         )}
 
-        {/* Infrastructure Highlights */}}
+        {/* Infrastructure Highlights */}
         {content.infrastructure && (
           <motion.section
             className="bento-section"
@@ -842,6 +927,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
         {/* Labs Section */}
         {content.labs && (
           <motion.section
+            id="labs"
             className="bento-section"
             variants={staggerContainer}
             initial="hidden"
@@ -853,7 +939,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
               <motion.h2 variants={fadeInUp}>Our Labs</motion.h2>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
               {content.labs.map((lab, index) => {
                 const isEven = index % 2 === 1;
                 return (
@@ -942,6 +1028,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
 
         {activePage !== "iucare" && activePage !== "academics" && content.cards && (
           <motion.section
+            id="strategic-pillars"
             className="bento-section"
             variants={staggerContainer}
             initial="hidden"
@@ -1115,6 +1202,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
         {/* Engagement section — last on page (Faculty page) */}
         {content.engagement && content.engagementAtBottom && (
           <motion.section
+            id="activities"
             className="bento-section"
             variants={staggerContainer}
             initial="hidden"

@@ -25,10 +25,21 @@ export function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const ActivePage = pageComponents[activePage] || HomePage;
 
-  const navigate = (id) => {
+  const navigate = (id, sectionId) => {
     setActivePage(id);
     setMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    
+    if (sectionId) {
+      // Small delay to allow the new page to render before scrolling
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   return (
