@@ -11,7 +11,7 @@ export const pages = [
 
 export const statCards = [
   ["5", "Strategic pillars", "home", "strategic-pillars"],
-  ["7+", "AI-aligned programs", "academics", "disciplines"],
-  ["WURI Recognition", "2024", "home", "recognition"],
+  ["...", "AI-aligned programs", "academics", "disciplines"],
+  ["22nd", "in Gen AI", "home", "recognition"],
   ["AI", "Culture across campus", "iucare", "labs"],
 ];

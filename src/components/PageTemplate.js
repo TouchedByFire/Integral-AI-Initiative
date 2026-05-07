@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView, animate } from "framer-motion";
-import { ArrowRight, BookOpenCheck, Trophy, CheckCircle2, PartyPopper, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, BookOpenCheck, Trophy, CheckCircle2, PartyPopper, ChevronLeft, ChevronRight, Cpu, Activity, TrendingUp, Pill, Scale, Building2, Sprout, Dna, Beaker, Briefcase, FlaskConical, Hammer, Stethoscope, Users, Zap, Calculator, Atom, Settings } from "lucide-react";
 import { Footer } from "./Footer";
 import { pages, statCards } from "../data/navigation";
+import { getTotalProgramCount } from "../data/programs";
 
 // Animation Variants
 const staggerContainer = {
@@ -23,32 +24,30 @@ const scaleUp = {
   show: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 40, damping: 12 } }
 };
 
-function StatCounter({ value }) {
+function StatCounter({ value, startFrom = 0 }) {
+  const [displayValue, setDisplayValue] = useState(startFrom);
   const nodeRef = useRef(null);
-  const isInView = useInView(nodeRef, { once: true, margin: "-100px 0px -100px 0px" });
+  const isInView = useInView(nodeRef, { once: true, margin: "-10px 0px -10px 0px" });
 
   useEffect(() => {
     let timeout;
     let controls;
 
-    const numericPart = value.match(/\d+/);
+    const valStr = String(value || "");
+    const numericPart = valStr.match(/\d+/);
     if (!numericPart) {
-      if (nodeRef.current) nodeRef.current.textContent = value;
+      setDisplayValue(valStr);
       return;
     }
     
     const target = parseInt(numericPart[0]);
-    const suffix = value.replace(/\d+/, '');
-    const prefix = value.split(numericPart[0])[0];
 
     const runAnimation = () => {
-      controls = animate(0, target, {
+      controls = animate(startFrom, target, {
         duration: 2.5,
         ease: "easeOut",
         onUpdate: (latest) => {
-          if (nodeRef.current) {
-            nodeRef.current.textContent = prefix + Math.floor(latest) + suffix;
-          }
+          setDisplayValue(Math.floor(latest));
         },
         onComplete: () => {
           timeout = setTimeout(runAnimation, 7000);
@@ -56,7 +55,7 @@ function StatCounter({ value }) {
       });
     };
 
-    if (isInView && nodeRef.current) {
+    if (isInView) {
       runAnimation();
     }
 
@@ -64,9 +63,50 @@ function StatCounter({ value }) {
       if (controls) controls.stop();
       if (timeout) clearTimeout(timeout);
     };
-  }, [isInView, value]);
+  }, [isInView, value, startFrom]);
 
-  return <span ref={nodeRef}>{value.match(/\d+/) ? '0' : value}</span>;
+  const valStr = String(value || "");
+  const numericPart = valStr.match(/\d+/);
+  const originalSuffix = numericPart ? valStr.replace(/\d+/, '') : "";
+  const prefix = numericPart ? valStr.split(numericPart[0])[0] : "";
+
+  const getOrdinal = (n) => {
+    const j = n % 10, k = n % 100;
+    if (j == 1 && k != 11) return "st";
+    if (j == 2 && k != 12) return "nd";
+    if (j == 3 && k != 13) return "rd";
+    return "th";
+  };
+
+  const isOrdinal = /^(st|nd|rd|th)$/i.test(originalSuffix);
+  const suffix = isOrdinal && typeof displayValue === 'number' ? getOrdinal(displayValue) : originalSuffix;
+
+  if (!numericPart) return <span ref={nodeRef}>{valStr}</span>;
+
+  return (
+    <span ref={nodeRef}>
+      {prefix}{displayValue}
+      {suffix && (
+        <span style={{ 
+          display: 'inline-block',
+          width: 0,
+          whiteSpace: 'nowrap',
+          overflow: 'visible'
+        }}>
+          <span style={{ 
+            fontSize: '0.45em', 
+            fontWeight: 600,
+            color: 'var(--text-muted)',
+            WebkitTextFillColor: 'var(--text-muted)',
+            verticalAlign: 'super',
+            marginLeft: '2px'
+          }}>
+            {suffix}
+          </span>
+        </span>
+      )}
+    </span>
+  );
 }
 
 function RoboticsCarousel({ images, title }) {
@@ -170,7 +210,13 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
     content.cards?.slice(0, 3).map(([title, text]) => ({ title, text, icon: BookOpenCheck })) ||
     [];
   
-  const displayStatCards = [...statCards];
+  const displayStatCards = statCards.map(card => {
+    if (card[1] === "AI-aligned programs") {
+      return [getTotalProgramCount().toString(), card[1], card[2], card[3]];
+    }
+    return card;
+  });
+  
   if (activePage === "students" || activePage === "faculty") {
     // 1. Remove AI Culture
     const aiCultureIdx = displayStatCards.findIndex(s => s[1].includes("Culture"));
@@ -318,7 +364,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
             whileHover={{ scale: 1.05, background: 'rgba(17, 103, 216, 0.05)' }}
           >
             <strong className="gradient-text" style={{ fontSize: value.length > 8 ? '1.8rem' : '3rem', display: 'block', lineHeight: 1.2, marginBottom: '0.5rem' }}>
-              <StatCounter value={value} />
+              <StatCounter value={value} startFrom={label === "in Gen AI" ? 100 : 0} />
             </strong>
             <span style={{ color: 'var(--text-muted)', fontWeight: 500, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>{label}</span>
           </motion.button>
@@ -474,28 +520,97 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
 
             <motion.div
               variants={staggerContainer}
-              style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1.25rem' }}
+              style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1.5rem' }}
             >
-              {content.disciplines.subjects.map((subject) => (
-                <motion.div
-                  key={subject.dept}
-                  variants={fadeInUp}
-                  className="glass-panel"
-                  style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}
-                >
-                  <div style={{ textAlign: 'center', paddingBottom: '0.75rem', borderBottom: '1px solid var(--border)' }}>
-                    <h4 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-display)', margin: 0 }}>{subject.dept}</h4>
-                  </div>
-                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    {subject.programs.map((prog) => (
-                      <li key={prog} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start', color: 'var(--text-muted)', fontSize: '0.88rem', lineHeight: 1.5 }}>
-                        <CheckCircle2 size={14} style={{ marginTop: '3px', color: 'var(--accent)', flexShrink: 0 }} />
-                        <span>{prog}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              ))}
+              {content.disciplines.subjects.map((subject) => {
+                const configMapping = {
+                  "Agriculture": { icon: Sprout, color: "#059669" },
+                  "Bioengineering": { icon: Dna, color: "#dc2626" },
+                  "Bioscience": { icon: Beaker, color: "#0d9488" },
+                  "Business Administration": { icon: Briefcase, color: "#d97706" },
+                  "Chemistry": { icon: FlaskConical, color: "#7c3aed" },
+                  "Civil Engineering": { icon: Hammer, color: "#92400e" },
+                  "Basic Medical Sciences": { icon: Stethoscope, color: "#dc2626" },
+                  "Humanities & Social Sciences": { icon: Users, color: "#db2777" },
+                  "Electrical Engineering": { icon: Zap, color: "#eab308" },
+                  "Electronics": { icon: Cpu, color: "#2563eb" },
+                  "Faculty of Law": { icon: Scale, color: "#92400e" },
+                  "Mathematics & Statistics": { icon: Calculator, color: "#4f46e5" },
+                  "Pharmacy": { icon: Pill, color: "#0d9488" },
+                  "Physics": { icon: Atom, color: "#4338ca" },
+                  "Physiotherapy": { icon: Activity, color: "#e11d48" },
+                  "Polytechnic": { icon: Settings, color: "#4b5563" }
+                };
+
+                const config = configMapping[subject.dept] || { icon: GraduationCap, color: "var(--primary)" };
+                const IconComponent = config.icon;
+
+                return (
+                  <motion.div
+                    key={subject.dept}
+                    variants={fadeInUp}
+                    className="glass-panel"
+                    style={{ 
+                      padding: '2rem', 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      gap: '1rem',
+                      borderLeft: `5px solid ${config.color}`,
+                      minHeight: '280px',
+                      justifyContent: 'space-between',
+                      flex: '1 1 340px',
+                      maxWidth: '400px'
+                    }}
+                  >
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.25rem' }}>
+                        <div style={{ 
+                          padding: '10px', 
+                          borderRadius: '10px', 
+                          background: `color-mix(in srgb, ${config.color} 10%, white)`,
+                          color: config.color,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                          <IconComponent size={24} />
+                        </div>
+                        <h4 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--primary)', margin: 0 }}>{subject.dept}</h4>
+                      </div>
+
+                      <div style={{ marginBottom: '1rem' }}>
+                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                          {subject.programs.map((prog, i) => (
+                            <li key={i} style={{ display: 'flex', gap: '0.6rem', alignItems: 'flex-start', color: 'var(--text-muted)', fontSize: '0.92rem', lineHeight: 1.5 }}>
+                              <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: config.color, marginTop: '7px', flexShrink: 0, opacity: 0.6 }} />
+                              <span>{prog}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1rem', marginTop: 'auto' }}>
+                      <button style={{ 
+                        background: 'none', 
+                        border: 'none', 
+                        padding: 0, 
+                        color: config.color, 
+                        fontWeight: 700, 
+                        fontSize: '0.9rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        cursor: 'pointer',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px'
+                      }}>
+                        Explore Faculty <div style={{ width: '15px', height: '2px', background: config.color, opacity: 0.6 }} />
+                      </button>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </motion.div>
 
             {content.disciplines.outro && (

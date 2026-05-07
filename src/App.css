@@ -218,9 +218,8 @@ body {
   background-attachment: fixed;
 }
 
-/* Smooth scrolling */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 /* Custom scrollbar */
@@ -1406,6 +1405,11 @@ h4 {
 
   .lab-row {
     flex-direction: column !important;
+  }
+
+  .lab-row > div {
+    flex: 1 1 auto !important;
+    width: 100% !important;
   }
 
   .lab-image {

@@ -34,11 +34,11 @@ export function App() {
       setTimeout(() => {
         const element = document.getElementById(sectionId);
         if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
+          element.scrollIntoView({ behavior: "auto" });
         }
       }, 100);
     } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: "auto" });
     }
   };
 
