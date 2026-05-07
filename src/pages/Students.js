@@ -6,7 +6,7 @@ const content = {
   title: "Student Innovation and Engagement",
   eyebrow: "Student Ecosystem",
   subtitle: "Hands-on AI learning, competitions, projects, and entrepreneurship",
-  image: asset("STUDENT INNOVATION AND ENGAGEMENT/a5fc5296c3c94a635b95fb790c19ac76.jpg"),
+  image: asset("HOME/Home Page Banner.jpg"),
   intro:
     "Students are central to the AI@Integral ecosystem. The initiative encourages active student participation in AI learning, research, and innovation activities. Through hands-on projects, competitions, and collaborative learning environments, students are empowered to explore real-world applications of Artificial Intelligence.",
   hackathons: {

@@ -137,11 +137,22 @@ function RoboticsCarousel({ images, title }) {
     exit: (dir) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0, transition: { duration: 0.25 } }),
   };
 
+  const handleDragEnd = (e, { offset, velocity }) => {
+    const swipe = offset.x;
+    if (swipe < -50) {
+      next();
+    } else if (swipe > 50) {
+      prev();
+    }
+  };
+
   return (
     <div
-      style={{ position: 'relative', borderRadius: 'var(--radius)', overflow: 'hidden', boxShadow: 'var(--shadow-glow)', userSelect: 'none' }}
+      style={{ position: 'relative', borderRadius: 'var(--radius)', overflow: 'hidden', boxShadow: 'var(--shadow-glow)', userSelect: 'none', touchAction: 'pan-y' }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(true)}
+      onTouchEnd={() => setPaused(false)}
     >
       {/* Slide */}
       <div style={{ position: 'relative', width: '100%', aspectRatio: '16/7', overflow: 'hidden', background: 'var(--bg-surface)' }}>
@@ -155,7 +166,12 @@ function RoboticsCarousel({ images, title }) {
             initial="enter"
             animate="center"
             exit="exit"
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={1}
+            onDragEnd={handleDragEnd}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', cursor: 'grab' }}
+            whileDrag={{ cursor: 'grabbing' }}
           />
         </AnimatePresence>
 
@@ -591,22 +607,47 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
                     </div>
 
                     <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1rem', marginTop: 'auto' }}>
-                      <button style={{ 
-                        background: 'none', 
-                        border: 'none', 
-                        padding: 0, 
-                        color: config.color, 
-                        fontWeight: 700, 
-                        fontSize: '0.9rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        cursor: 'pointer',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.5px'
-                      }}>
-                        Explore Faculty <div style={{ width: '15px', height: '2px', background: config.color, opacity: 0.6 }} />
-                      </button>
+                      <motion.a 
+                        href="#/faculty"
+                        onClick={(e) => { e.preventDefault(); onNavigate('faculty'); }}
+                        initial="rest"
+                        whileHover="hover"
+                        variants={{ rest: { x: 0 }, hover: { x: 5 } }}
+                        style={{ 
+                          textDecoration: 'none',
+                          background: 'none', 
+                          border: 'none', 
+                          padding: '0.5rem 0',
+                          color: config.color, 
+                          fontWeight: 700, 
+                          fontSize: '0.9rem',
+                          display: 'flex',
+                          width: 'max-content',
+                          alignItems: 'center',
+                          gap: '8px',
+                          cursor: 'pointer',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.5px',
+                          position: 'relative',
+                          zIndex: 10
+                        }}
+                      >
+                        Explore Faculty 
+                        <div style={{ position: 'relative', width: '16px', height: '16px', display: 'flex', alignItems: 'center' }}>
+                          <motion.div 
+                            variants={{ rest: { opacity: 0.6, x: 0 }, hover: { opacity: 0, x: 10 } }}
+                            transition={{ duration: 0.2 }}
+                            style={{ position: 'absolute', width: '15px', height: '2px', background: config.color }}
+                          />
+                          <motion.div
+                            variants={{ rest: { opacity: 0, x: -10 }, hover: { opacity: 1, x: 0 } }}
+                            transition={{ duration: 0.2 }}
+                            style={{ position: 'absolute', left: 0, display: 'flex', alignItems: 'center' }}
+                          >
+                            <ArrowRight size={16} />
+                          </motion.div>
+                        </div>
+                      </motion.a>
                     </div>
                   </motion.div>
                 );

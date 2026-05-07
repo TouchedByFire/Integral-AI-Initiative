@@ -6,7 +6,7 @@ const content = {
   title: "Faculty Development and AI Upskilling",
   eyebrow: "Educator Enablement",
   subtitle: "Workshops, certifications, and interdisciplinary AI teaching practices",
-  image: asset("IUCARE - INTEGRAL UNIVERSITY CENTRE FOR AI/Faculty Hero Banner.jpg"),
+  image: asset("HOME/Home Page Banner.jpg"),
   heroMaxWidth: "950px",
   intro:
     "Faculty development is an essential component of the AI@Integral Initiative. Continuous professional development programs are organized to help faculty members integrate AI technologies into teaching and research. These initiatives enable educators to remain updated with emerging technologies and adopt innovative pedagogical practices.",

@@ -6,7 +6,7 @@ const content = {
   title: "Ethical AI Policy",
   eyebrow: "Responsible Innovation",
   subtitle: "Guiding the responsible development and deployment of Artificial Intelligence",
-  image: asset("ETHICAL_AI/hero_banner.png"),
+  image: asset("HOME/Home Page Banner.jpg"),
   heroMaxWidth: "860px",
   intro:
     "Integral University is committed to the ethical, responsible, and inclusive use of Artificial Intelligence across all its academic, research, and administrative functions. The Ethical AI Policy of the AI@Integral Initiative establishes a framework of principles and guidelines that govern how AI technologies are developed, applied, and evaluated within the university. This policy aims to ensure that AI adoption at Integral University promotes fairness, transparency, accountability, and human well-being.",

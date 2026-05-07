@@ -8,7 +8,7 @@ const content = {
   eyebrow: "AI in Academics",
   subtitle: "X + AI: Integration across disciplines",
   heroMaxWidth: "960px",
-  image: asset("AI IN ACADEMICS/1727d27e69b4c3a097420da1691c5529.jpg"),
+  image: asset("HOME/Home Page Banner.jpg"),
   intro:
     "AI@Integral follows a multidisciplinary integration model where Artificial Intelligence is embedded within domain-specific learning frameworks. AI is positioned as an enabler across disciplines, ensuring graduates are future-ready and industry-aligned. Integral University aims to equip students with essential AI competencies, regardless of their specialization — enabling them to think critically about AI, utilize AI-powered tools responsibly, and contribute to an AI-integrated future.",
 

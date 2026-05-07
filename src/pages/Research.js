@@ -6,7 +6,7 @@ const content = {
   title: "Research & Development",
   eyebrow: "Innovation Mandate",
   subtitle: "Interdisciplinary research for real-world AI solutions",
-  image: asset("RESEARCH  DEVELOPMENT/2f982590584371a0fe2e2aef4ccac26a.jpg"),
+  image: asset("HOME/Home Page Banner.jpg"),
   intro:
     "Research and development form a key component of the AI@Integral Initiative, driving innovation and knowledge creation in Artificial Intelligence and related technologies. Through the IUCARE - Integral University Centre for AI Research & Education, the university promotes interdisciplinary research, collaborative projects, and technological development aimed at solving real-world challenges. The centre provides a platform for faculty members, researchers, and students to engage in advanced research activities and develop innovative AI-based solutions.",
   sections: [

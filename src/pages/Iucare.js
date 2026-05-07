@@ -6,7 +6,7 @@ const content = {
   title: "IUCARE",
   eyebrow: "Integral University Centre for AI Research & Education",
   subtitle: "Inspiring excellence through Artificial Intelligence",
-  image: asset("IUCARE - INTEGRAL UNIVERSITY CENTRE FOR AI/IUCARE hero banner.jpg"),
+  image: asset("HOME/Home Page Banner.jpg"),
   intro:
     "IUCARE - Integral University Centre for AI Research & Education, serves as the research and innovation hub of the AI@Integral Initiative. The centre promotes interdisciplinary research, technological innovation, and collaborative projects in emerging Artificial Intelligence domains. IUCARE provides a platform where faculty members, researchers, and students work together to develop AI-driven solutions addressing real-world challenges.",
   sections: [
