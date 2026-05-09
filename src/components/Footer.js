@@ -1,35 +1,73 @@
 import { motion } from "framer-motion";
-import { Lock, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react";
+import { Lock, Mail, Phone, MapPin, Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+
+const TwitterXIcon = ({ size = 24, color = "currentColor", ...props }) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill={color} 
+    {...props}
+  >
+    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+  </svg>
+);
 
 export function Footer() {
   const footerData = [
     {
       title: "QUICK LINKS",
-      links: ["About Us", "Rankings", "Integral Times", "Events", "Campus Tour", "Careers at IU"]
+      links: [
+        { name: "About Us", href: "https://www.iul.ac.in/About/Overview/Overview.aspx" },
+        { name: "Rankings", href: "https://www.iul.ac.in/Rankings.aspx" },
+        { name: "Integral Times", href: "https://www.iul.ac.in/Times/Home.aspx" },
+        { name: "Events", href: "https://www.iul.ac.in/Times/Events.aspx" },
+        { name: "Campus Tour", href: "https://www.iul.ac.in/AdmissionInfo/Virtual_Tour.aspx" },
+        { name: "Careers at IU", href: "https://www.iul.ac.in/career.aspx" }
+      ]
     },
     {
       title: "ACADEMICS",
-      links: ["Program Finder", "13 Faculties", "Research", "Library", "Online Programs", "Academic Calendar"]
+      links: [
+        { name: "Program Finder", href: "https://www.iul.ac.in/Academics/under-Graduate.aspx" },
+        { name: "13 Faculties", href: "https://www.iul.ac.in/Department/Agriculture.aspx" },
+        { name: "Research", href: "https://www.iul.ac.in/dsr/index.aspx" },
+        { name: "Library", href: "https://library.iul.ac.in/" },
+        { name: "Online Programs", href: "https://iulonline.in/" },
+        { name: "Academic Calendar", href: "https://www.iul.ac.in/Academic_Calendar.aspx" }
+      ]
     },
     {
       title: "ADMISSIONS",
-      links: ["How to Apply", "Fee Structure", "Scholarships", "International", "IUET 2026", "Download Brochure"]
+      links: [
+        { name: "How to Apply", href: "https://www.iul.ac.in/AdmissionInfo/Admission_Overview.aspx#target" },
+        { name: "Fee Structure", href: "https://www.iul.ac.in/AdmissionInfo/FeeInd.aspx" },
+        { name: "Scholarships", href: "https://www.iul.ac.in/AdmissionInfo/Integral_University_Scholarships_Schemes.aspx" },
+        { name: "International", href: "https://internationaloffice.iul.ac.in/" },
+        { name: "IUET 2026", href: "https://www.iul.ac.in/iuet_syllabus.aspx" },
+        { name: "Download Brochure", href: "https://www.iul.ac.in/PDF/IU-NATIONAl-BROCHURE-FINAL-2024.pdf" }
+      ]
     },
     {
       title: "SERVICES",
       links: [
-        { name: "ERP Login", locked: true },
-        { name: "Student Portal", locked: true },
-        { name: "Noticeboard", locked: false },
-        { name: "Email", locked: true },
-        { name: "Results", locked: false },
-        { name: "Alumni Portal", locked: true },
-        { name: "Hospital", locked: false }
+        { name: "ERP Login", href: "https://sms.iul.ac.in/", locked: true },
+        { name: "Student Portal", href: "https://sms.iul.ac.in/", locked: true },
+        { name: "Noticeboard", href: "https://www.iul.ac.in/noticeboard.aspx", locked: false },
+        { name: "Email", href: "https://www.iul.ac.in/emailaccess/Default.aspx", locked: true },
+        { name: "Results", href: "https://results.iul.ac.in/", locked: false },
+        { name: "Alumni Portal", href: "https://alumni.iul.ac.in/", locked: true },
+        { name: "Hospital", href: "https://www.iul.ac.in/iimsr/Hospital.aspx", locked: false }
       ]
     },
     {
       title: "CONNECT",
-      links: ["Contact us", "Grievance", "Newsletter"]
+      links: [
+        { name: "Contact us", href: "https://www.iul.ac.in/Contactus.aspx" },
+        { name: "Grievance", href: "https://www.iul.ac.in/grievances/Default.aspx" },
+        { name: "Newsletter", href: "https://www.iul.ac.in/documents/NewsLetter.pdf?=3435" }
+      ]
     }
   ];
 
@@ -74,9 +112,12 @@ export function Footer() {
                   const isObj = typeof link === 'object';
                   const name = isObj ? link.name : link;
                   const locked = isObj ? link.locked : false;
+                  const href = isObj && link.href ? link.href : "#";
+                  const target = isObj && link.href ? "_blank" : undefined;
+                  const rel = target === "_blank" ? "noopener noreferrer" : undefined;
                   return (
                     <li key={lIdx}>
-                      <a href="#" style={{ 
+                      <a href={href} target={target} rel={rel} style={{
                         color: 'var(--text-muted)', 
                         textDecoration: 'none', 
                         fontSize: '0.9rem',
@@ -136,8 +177,14 @@ export function Footer() {
           </div>
 
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            {[Facebook, Twitter, Instagram, Linkedin, Youtube].map((Icon, i) => (
-              <a key={i} href="#" style={{ 
+            {[
+              { Icon: Facebook, url: "https://www.facebook.com/integralunilko/" },
+              { Icon: TwitterXIcon, url: "https://x.com/IntegralUnilko" },
+              { Icon: Instagram, url: "https://www.instagram.com/integralunilko_official" },
+              { Icon: Linkedin, url: "https://www.linkedin.com/school/integral-university-lucknow-uttar-pradesh/" },
+              { Icon: Youtube, url: "https://www.youtube.com/@integralunilko" }
+            ].map(({ Icon, url }, i) => (
+              <a key={i} href={url} target="_blank" rel="noopener noreferrer" style={{ 
                 width: '38px', 
                 height: '38px', 
                 borderRadius: '50%', 

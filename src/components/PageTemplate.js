@@ -406,8 +406,8 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
 
           <div className="overview-layout">
             <motion.article variants={scaleUp} className="glass-panel glass-panel--primary overview-panel">
-              <p style={{ fontSize: '1.2rem', color: 'var(--text-main)', marginBottom: '1.5rem', lineHeight: 1.8 }}>{content.intro}</p>
-              {content.body && <p style={{ color: 'var(--text-muted)', lineHeight: 1.7 }}>{content.body}</p>}
+              <p style={{ fontSize: '1.2rem', color: 'var(--text-main)', marginBottom: '1.5rem', lineHeight: 1.8, textAlign: 'justify' }}>{content.intro}</p>
+              {content.body && <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, textAlign: 'justify' }}>{content.body}</p>}
             </motion.article>
 
             {featureItems.length > 0 && (
@@ -608,8 +608,9 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
 
                     <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1rem', marginTop: 'auto' }}>
                       <motion.a 
-                        href="#/faculty"
-                        onClick={(e) => { e.preventDefault(); onNavigate('faculty'); }}
+                        href={subject.link || "#"}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         initial="rest"
                         whileHover="hover"
                         variants={{ rest: { x: 0 }, hover: { x: 5 } }}
@@ -632,7 +633,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
                           zIndex: 10
                         }}
                       >
-                        Explore Faculty 
+                        Visit Department 
                         <div style={{ position: 'relative', width: '16px', height: '16px', display: 'flex', alignItems: 'center' }}>
                           <motion.div 
                             variants={{ rest: { opacity: 0.6, x: 0 }, hover: { opacity: 0, x: 10 } }}
@@ -688,11 +689,11 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
                   style={{ padding: '2rem' }}
                 >
                   <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--text-main)' }}>{section.title}</h3>
-                  {section.text && <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>{section.text}</p>}
+                  {section.text && <p style={{ color: 'var(--text-muted)', marginBottom: '1rem', textAlign: 'justify' }}>{section.text}</p>}
                   {section.items && (
                     <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                       {section.items.map((item) => (
-                        <li key={item} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start', color: 'var(--text-muted)' }}>
+                        <li key={item} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start', color: 'var(--text-muted)', textAlign: 'justify' }}>
                           <CheckCircle2 size={16} style={{ marginTop: '4px', color: 'var(--accent)', flexShrink: 0 }} />
                           <span>{item}</span>
                         </li>

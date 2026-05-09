@@ -5,54 +5,128 @@ import { asset } from "../utils/assets";
 const content = {
   title: "Ethical AI Policy",
   eyebrow: "Responsible Innovation",
-  subtitle: "Guiding the responsible development and deployment of Artificial Intelligence",
+  subtitle: "Guiding the ethical, transparent, and accountable use of AI across the University",
   image: asset("HOME/Home Page Banner.jpg"),
   heroMaxWidth: "860px",
   intro:
-    "Integral University is committed to the ethical, responsible, and inclusive use of Artificial Intelligence across all its academic, research, and administrative functions. The Ethical AI Policy of the AI@Integral Initiative establishes a framework of principles and guidelines that govern how AI technologies are developed, applied, and evaluated within the university. This policy aims to ensure that AI adoption at Integral University promotes fairness, transparency, accountability, and human well-being.",
+    "Integral University, through the AI@Integral Initiative, is committed to integrating Artificial Intelligence (AI) across academics, research, administration, and innovation in a responsible and ethical manner. As AI becomes an integral part of higher education, institutions must ensure that its use enhances learning without compromising academic integrity, fairness, and trust. This policy establishes a comprehensive framework for the ethical, transparent, and accountable use of AI across the University.",
 
   sections: [
     {
-      title: "Core Principles",
+      title: "Purpose",
+      text: "The policy aims to:",
       items: [
-        "Fairness & Non-Discrimination",
-        "Transparency & Explainability",
-        "Accountability & Responsibility",
-        "Privacy & Data Protection",
-        "Human Oversight & Control",
-        "Inclusivity & Accessibility",
-        "Sustainability & Social Good",
+        "Promote responsible and ethical use of AI tools",
+        "Safeguard academic integrity and originality",
+        "Ensure data privacy and institutional security",
+        "Encourage innovation with accountability",
+        "Provide clear guidelines for all stakeholders",
       ],
     },
     {
-      title: "Policy Scope",
+      title: "Scope",
+      text: "This policy applies to:",
       items: [
-        "AI use in academic programs and curricula",
-        "AI-powered research and data analysis",
-        "AI tools used by students and faculty",
-        "Administrative AI systems and automation",
-        "AI-generated content and intellectual property",
-        "Third-party AI platforms adopted by the university",
+        "Faculty members",
+        "Students and research scholars",
+        "Administrative and technical staff",
+        "All users of AI tools within the University ecosystem",
       ],
     },
     {
-      title: "Our Commitments",
-      text: "Integral University pledges to uphold the highest standards of ethical AI practice. We commit to regularly reviewing AI systems for bias and unintended harm, ensuring informed consent in data collection, maintaining human decision-making authority in critical processes, and fostering an AI-literate community that critically evaluates AI outputs. The university will not deploy AI systems that compromise student privacy, academic integrity, or institutional equity.",
+      title: "Core Ethical Principles",
+      text: "The use of AI at Integral University shall be guided by the following principles:",
+      items: [
+        "Academic Integrity: AI must not be used to generate academic work without proper acknowledgment. Ethical AI use must support learning rather than replace it.",
+        "Transparency: Users must clearly disclose when and how AI tools are used in academic, research, or administrative work. Transparency builds trust and accountability in academic environments.",
+        "Accountability: Users remain responsible for all AI-assisted outputs, including accuracy, originality, and ethical implications.",
+        "Privacy & Data Protection: Confidential, personal, or institutional data must not be shared with AI tools without authorization.",
+        "Fairness & Inclusivity: AI must not be used in ways that introduce bias or discrimination. Institutions must actively address algorithmic bias and ensure equitable outcomes.",
+        "Human Oversight: AI shall augment human intelligence, not replace it. Critical decisions must involve human judgment and review.",
+      ],
+      fullWidth: true,
+    },
+    {
+      title: "Acceptable Use",
+      text: "AI tools may be used for:",
+      items: [
+        "Concept understanding and learning support",
+        "Research assistance and literature exploration",
+        "Coding and problem-solving",
+        "Drafting, editing, and structuring content",
+        "Data analysis and visualization",
+        "Administrative efficiency",
+      ],
+    },
+    {
+      title: "Prohibited Use",
+      text: "The following are strictly prohibited:",
+      items: [
+        "Submitting AI-generated work as original without disclosure",
+        "Fabricating data, references, or research outputs",
+        "Plagiarism, impersonation, or academic misconduct using AI",
+        "Sharing confidential or sensitive data with AI tools",
+        "Using AI for misinformation or unethical activities",
+      ],
+    },
+    {
+      title: "Academic & Research Guidelines",
+      items: [
+        "AI-assisted work must include clear acknowledgment",
+        "Faculty shall guide students on ethical AI usage",
+        "AI outputs must be critically evaluated and verified",
+        "Research must adhere to publication ethics",
+        "Human intellectual contribution must remain central",
+      ],
+      fullWidth: true,
+    },
+    {
+      title: "Roles & Responsibilities",
+      items: [
+        "Faculty: Integrate ethical AI practices in teaching and assessment; Guide students on responsible AI use; Ensure academic integrity.",
+        "Students & Research Scholars: Use AI as a learning aid, not a substitute; Maintain honesty and originality; Disclose AI usage where applicable.",
+        "Administration: Ensure secure and compliant AI adoption; Facilitate training and awareness.",
+        "AI@Integral / IUCARE: Promote awareness and capacity building; Recommend approved AI tools; Monitor policy implementation.",
+      ],
+    },
+    {
+      title: "Implementation Strategy",
+      items: [
+        "Awareness sessions and workshops will be conducted",
+        "Departments will integrate ethical AI practices",
+        "AI usage disclosure mechanisms will be introduced",
+        "Periodic review and updates will be undertaken",
+      ],
+    },
+    {
+      title: "Compliance & Violations",
+      text: "Violation of this policy may result in:",
+      items: [
+        "Academic penalties for students",
+        "Disciplinary action for faculty/staff",
+        "Review under University regulations",
+      ],
+      fullWidth: true,
+    },
+    {
+      title: "Review & Updates",
+      text: "This policy shall be reviewed periodically under AI@Integral to remain aligned with evolving AI technologies and global standards.",
+    },
+    {
+      title: "Conclusion",
+      text: "Integral University envisions AI as a transformative force guided by ethics, responsibility, and academic integrity. AI@Integral aims to create a future-ready ecosystem where innovation is balanced with trust, accountability, and societal impact.",
+    },
+    {
+      title: "SDG Alignment",
+      text: "This policy aligns with the principles of the United Nations Sustainable Development Goals, particularly:",
+      items: [
+        "SDG 4: Quality Education",
+        "SDG 9: Innovation & Infrastructure",
+        "SDG 16: Strong Institutions",
+      ],
       fullWidth: true,
     },
   ],
-
-  focusAreas: {
-    title: "Guidelines for Responsible AI Use",
-    items: [
-      "Always disclose AI-assisted work in academic submissions",
-      "Do not use AI to generate misleading or harmful content",
-      "Protect personal data when working with AI tools",
-      "Report biased or erroneous AI outputs to relevant authorities",
-      "Engage critically with AI outputs — verify before acting",
-      "Respect intellectual property rights in AI-generated content",
-    ],
-  },
 };
 
 export function EthicalAIPage(props) {
