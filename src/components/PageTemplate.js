@@ -252,21 +252,21 @@ function LabCarousel({ images, title }) {
 
   return (
     <div
-      style={{ position: 'relative', width: '100%', height: '100%', minHeight: '320px', overflow: 'hidden', userSelect: 'none', touchAction: 'pan-y' }}
+      style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', userSelect: 'none', touchAction: 'pan-y' }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <div style={{ position: 'relative', width: '100%', height: '100%', minHeight: '320px', overflow: 'hidden', background: '#000000' }}>
+      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: '#000000' }}>
         {/* Sliding Track */}
         <motion.div
           animate={{ x: `-${current * 100}%` }}
           transition={{ type: "tween", ease: [0.25, 1, 0.5, 1], duration: 0.6 }}
-          style={{ display: 'flex', width: '100%', height: '100%' }}
+          style={{ display: 'flex', width: '100%', height: '100%', position: 'absolute', inset: 0 }}
         >
           {images.map((src, idx) => (
-            <div key={idx} style={{ flexShrink: 0, width: '100%', height: '100%' }}>
+            <div key={idx} style={{ flexShrink: 0, width: '100%', height: '100%', position: 'relative' }}>
               <img
                 src={src}
                 alt={`${title} ${idx + 1}`}
