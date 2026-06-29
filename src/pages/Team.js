@@ -34,8 +34,8 @@ const teamGroups = [
     color: "var(--accent)",
     members: [
       { name: "Prof. Syed Misbahul Hasan", role: "Member", dept: "Director, IQAC" },
-      { name: "Prof. Mohammed Haris Siddiqui", role: "Member", dept: "Director, Directorate of Admissions & Academics" },
-      { name: "Dr. Mirza Ghazanfar Beg", role: "Member", dept: "Assistant Professor, Dept. of Computer Application & Coordinator, IUCAT" },
+      { name: "Prof. Mohammed Haris Siddiqui", role: "Member", dept: "Registrar, Integral University & Director, Directorate of Admissions & Academics" },
+      { name: "Dr. Mirza Ghazanfar Beg", role: "Member", dept: "Coordinator, IUCARE & Assistant Professor, Dept. of Computer Application" },
       { name: "Mr. Syed Gulam Mohamood", role: "Member", dept: "Manager (IT Services)" },
       { name: "Mr. Mashuood Ali", role: "Member", dept: "Coordinator, DOSA" },
     ],

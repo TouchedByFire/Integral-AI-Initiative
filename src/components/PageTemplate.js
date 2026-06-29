@@ -219,6 +219,114 @@ function RoboticsCarousel({ images, title }) {
   );
 }
 
+function LabCarousel({ images, title }) {
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [paused, setPaused] = useState(false);
+
+  const go = (next) => {
+    setDirection(next > current ? 1 : -1);
+    setCurrent(next);
+  };
+  const prev = () => go((current - 1 + images.length) % images.length);
+  const next = () => go((current + 1) % images.length);
+
+  useEffect(() => {
+    if (paused) return;
+    const id = setInterval(() => {
+      setDirection(1);
+      setCurrent((c) => (c + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(id);
+  }, [paused, current, images.length]);
+
+  const slideVariants = {
+    enter: (dir) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
+    center: { x: 0, opacity: 1, transition: { type: 'spring', stiffness: 260, damping: 30 } },
+    exit: (dir) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0, transition: { duration: 0.25 } }),
+  };
+
+  const handleDragEnd = (e, { offset, velocity }) => {
+    const swipe = offset.x;
+    if (swipe < -50) {
+      next();
+    } else if (swipe > 50) {
+      prev();
+    }
+  };
+
+  return (
+    <div
+      style={{ position: 'relative', width: '100%', height: '100%', minHeight: '320px', overflow: 'hidden', userSelect: 'none', touchAction: 'pan-y' }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(true)}
+      onTouchEnd={() => setPaused(false)}
+    >
+      <div style={{ position: 'relative', width: '100%', height: '100%', minHeight: '320px', overflow: 'hidden', background: 'var(--bg-surface)' }}>
+        <AnimatePresence custom={direction} mode="popLayout">
+          <motion.img
+            key={current}
+            src={images[current]}
+            alt={`${title} ${current + 1}`}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={1}
+            onDragEnd={handleDragEnd}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', cursor: 'grab' }}
+            whileDrag={{ cursor: 'grabbing' }}
+          />
+        </AnimatePresence>
+
+        {/* Gradient overlay for arrows */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,0,0,0.18) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.18) 100%)', pointerEvents: 'none' }} />
+
+        {/* Prev / Next buttons */}
+        <button
+          onClick={prev}
+          aria-label="Previous image"
+          style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.85)', border: 'none', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 14px rgba(0,0,0,0.15)', color: 'var(--primary)', transition: 'background 0.2s, transform 0.2s', zIndex: 2 }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'white'; e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.85)'; e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; }}
+        >
+          <ChevronLeft size={20} />
+        </button>
+        <button
+          onClick={next}
+          aria-label="Next image"
+          style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.85)', border: 'none', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 14px rgba(0,0,0,0.15)', color: 'var(--primary)', transition: 'background 0.2s, transform 0.2s', zIndex: 2 }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'white'; e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.85)'; e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; }}
+        >
+          <ChevronRight size={20} />
+        </button>
+
+        {/* Slide counter */}
+        <div style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'rgba(0,0,0,0.45)', color: 'white', borderRadius: '20px', padding: '0.25rem 0.75rem', fontSize: '0.8rem', fontWeight: 600, zIndex: 2 }}>
+          {current + 1} / {images.length}
+        </div>
+
+        {/* Dot indicators overlayed at the bottom */}
+        <div style={{ position: 'absolute', bottom: '1rem', left: '0', right: '0', display: 'flex', justifyContent: 'center', gap: '0.5rem', zIndex: 2 }}>
+          {images.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => go(i)}
+              aria-label={`Go to image ${i + 1}`}
+              style={{ width: i === current ? '24px' : '8px', height: '8px', borderRadius: '4px', border: 'none', background: i === current ? 'var(--primary)' : 'rgba(255,255,255,0.5)', cursor: 'pointer', padding: 0, transition: 'all 0.3s ease' }}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, children }) {
   const nextPage = pages[(pages.findIndex((page) => page.id === activePage) + 1) % pages.length].id;
   const featureItems =
@@ -1144,11 +1252,15 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
                       style={{ flex: '1 1 360px', borderRadius: 'var(--radius)', overflow: 'hidden', minHeight: '320px', boxShadow: 'var(--shadow-glow)' }}
                       whileHover={{ scale: 1.02, transition: { type: 'spring', stiffness: 200, damping: 20 } }}
                     >
-                      <img
-                        src={lab.image}
-                        alt={lab.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                      />
+                      {lab.images && lab.images.length > 0 ? (
+                        <LabCarousel images={lab.images} title={lab.name} />
+                      ) : (
+                        <img
+                          src={lab.image}
+                          alt={lab.name}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        />
+                      )}
                     </motion.div>
                   </motion.div>
                 );
