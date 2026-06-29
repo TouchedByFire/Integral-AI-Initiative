@@ -111,11 +111,10 @@ function StatCounter({ value, startFrom = 0 }) {
 
 function RoboticsCarousel({ images, title }) {
   const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(1);
   const [paused, setPaused] = useState(false);
+  const touchStartRef = useRef(0);
 
   const go = (next) => {
-    setDirection(next > current ? 1 : -1);
     setCurrent(next);
   };
   const prev = () => go((current - 1 + images.length) % images.length);
@@ -125,23 +124,23 @@ function RoboticsCarousel({ images, title }) {
   useEffect(() => {
     if (paused) return;
     const id = setInterval(() => {
-      setDirection(1);
       setCurrent((c) => (c + 1) % images.length);
     }, 2000);
     return () => clearInterval(id);
   }, [paused, current, images.length]);
 
-  const slideVariants = {
-    enter: (dir) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
-    center: { x: 0, opacity: 1, transition: { type: 'spring', stiffness: 260, damping: 30 } },
-    exit: (dir) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0, transition: { duration: 0.25 } }),
+  const handleTouchStart = (e) => {
+    setPaused(true);
+    touchStartRef.current = e.targetTouches[0].clientX;
   };
 
-  const handleDragEnd = (e, { offset, velocity }) => {
-    const swipe = offset.x;
-    if (swipe < -50) {
+  const handleTouchEnd = (e) => {
+    setPaused(false);
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartRef.current - touchEndX;
+    if (diff > 50) {
       next();
-    } else if (swipe > 50) {
+    } else if (diff < -50) {
       prev();
     }
   };
@@ -151,29 +150,26 @@ function RoboticsCarousel({ images, title }) {
       style={{ position: 'relative', borderRadius: 'var(--radius)', overflow: 'hidden', boxShadow: 'var(--shadow-glow)', userSelect: 'none', touchAction: 'pan-y' }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      onTouchStart={() => setPaused(true)}
-      onTouchEnd={() => setPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
-      {/* Slide */}
-      <div style={{ position: 'relative', width: '100%', aspectRatio: '16/7', overflow: 'hidden', background: 'var(--bg-surface)' }}>
-        <AnimatePresence custom={direction} mode="popLayout">
-          <motion.img
-            key={current}
-            src={images[current]}
-            alt={`${title} ${current + 1}`}
-            custom={direction}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={1}
-            onDragEnd={handleDragEnd}
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', cursor: 'grab' }}
-            whileDrag={{ cursor: 'grabbing' }}
-          />
-        </AnimatePresence>
+      <div style={{ position: 'relative', width: '100%', aspectRatio: '16/7', overflow: 'hidden', background: '#000000' }}>
+        {/* Sliding Track */}
+        <motion.div
+          animate={{ x: `-${current * 100}%` }}
+          transition={{ type: "tween", ease: [0.25, 1, 0.5, 1], duration: 0.6 }}
+          style={{ display: 'flex', width: '100%', height: '100%' }}
+        >
+          {images.map((src, idx) => (
+            <div key={idx} style={{ flexShrink: 0, width: '100%', height: '100%' }}>
+              <img
+                src={src}
+                alt={`${title} ${idx + 1}`}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+            </div>
+          ))}
+        </motion.div>
 
         {/* Gradient overlay for arrows */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,0,0,0.18) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.18) 100%)', pointerEvents: 'none' }} />
@@ -221,11 +217,10 @@ function RoboticsCarousel({ images, title }) {
 
 function LabCarousel({ images, title }) {
   const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(1);
   const [paused, setPaused] = useState(false);
+  const touchStartRef = useRef(0);
 
   const go = (next) => {
-    setDirection(next > current ? 1 : -1);
     setCurrent(next);
   };
   const prev = () => go((current - 1 + images.length) % images.length);
@@ -234,23 +229,23 @@ function LabCarousel({ images, title }) {
   useEffect(() => {
     if (paused) return;
     const id = setInterval(() => {
-      setDirection(1);
       setCurrent((c) => (c + 1) % images.length);
     }, 3000);
     return () => clearInterval(id);
   }, [paused, current, images.length]);
 
-  const slideVariants = {
-    enter: (dir) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
-    center: { x: 0, opacity: 1, transition: { type: 'spring', stiffness: 260, damping: 30 } },
-    exit: (dir) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0, transition: { duration: 0.25 } }),
+  const handleTouchStart = (e) => {
+    setPaused(true);
+    touchStartRef.current = e.targetTouches[0].clientX;
   };
 
-  const handleDragEnd = (e, { offset, velocity }) => {
-    const swipe = offset.x;
-    if (swipe < -50) {
+  const handleTouchEnd = (e) => {
+    setPaused(false);
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartRef.current - touchEndX;
+    if (diff > 50) {
       next();
-    } else if (swipe > 50) {
+    } else if (diff < -50) {
       prev();
     }
   };
@@ -260,28 +255,26 @@ function LabCarousel({ images, title }) {
       style={{ position: 'relative', width: '100%', height: '100%', minHeight: '320px', overflow: 'hidden', userSelect: 'none', touchAction: 'pan-y' }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      onTouchStart={() => setPaused(true)}
-      onTouchEnd={() => setPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
-      <div style={{ position: 'relative', width: '100%', height: '100%', minHeight: '320px', overflow: 'hidden', background: 'var(--bg-surface)' }}>
-        <AnimatePresence custom={direction} mode="popLayout">
-          <motion.img
-            key={current}
-            src={images[current]}
-            alt={`${title} ${current + 1}`}
-            custom={direction}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={1}
-            onDragEnd={handleDragEnd}
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', cursor: 'grab' }}
-            whileDrag={{ cursor: 'grabbing' }}
-          />
-        </AnimatePresence>
+      <div style={{ position: 'relative', width: '100%', height: '100%', minHeight: '320px', overflow: 'hidden', background: '#000000' }}>
+        {/* Sliding Track */}
+        <motion.div
+          animate={{ x: `-${current * 100}%` }}
+          transition={{ type: "tween", ease: [0.25, 1, 0.5, 1], duration: 0.6 }}
+          style={{ display: 'flex', width: '100%', height: '100%' }}
+        >
+          {images.map((src, idx) => (
+            <div key={idx} style={{ flexShrink: 0, width: '100%', height: '100%' }}>
+              <img
+                src={src}
+                alt={`${title} ${idx + 1}`}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+            </div>
+          ))}
+        </motion.div>
 
         {/* Gradient overlay for arrows */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,0,0,0.18) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.18) 100%)', pointerEvents: 'none' }} />
