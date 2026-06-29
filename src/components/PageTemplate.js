@@ -252,7 +252,7 @@ function LabCarousel({ images, title }) {
 
   return (
     <div
-      style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', userSelect: 'none', touchAction: 'pan-y' }}
+      style={{ position: 'absolute', inset: 0, overflow: 'hidden', userSelect: 'none', touchAction: 'pan-y' }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onTouchStart={handleTouchStart}
@@ -1242,7 +1242,7 @@ export function PageTemplate({ activePage, content, icon: PageIcon, onNavigate, 
                     {/* Image Panel */}
                     <motion.div
                       className="lab-image"
-                      style={{ flex: '1 1 360px', borderRadius: 'var(--radius)', overflow: 'hidden', minHeight: '320px', boxShadow: 'var(--shadow-glow)' }}
+                      style={{ position: 'relative', flex: '1 1 360px', borderRadius: 'var(--radius)', overflow: 'hidden', minHeight: '320px', boxShadow: 'var(--shadow-glow)' }}
                       whileHover={{ scale: 1.02, transition: { type: 'spring', stiffness: 200, damping: 20 } }}
                     >
                       {lab.images && lab.images.length > 0 ? (
